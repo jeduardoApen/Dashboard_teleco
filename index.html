@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="CyberNet - Dashboard de monitoreo de red para Internet Prepago."
+    />
+    <title>CyberNet · Network Control Center</title>
+
+    <link rel="stylesheet" href="./assets/css/variables.css" />
+    <link rel="stylesheet" href="./assets/css/reset.css" />
+    <link rel="stylesheet" href="./assets/css/layout.css" />
+    <link rel="stylesheet" href="./assets/css/components.css" />
+
+    <script type="module" src="./assets/js/app.js"></script>
+  </head>
+
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="brand">
+          <h1 class="brand__title">CyberNet</h1>
+          <p class="brand__subtitle">Network Control Center</p>
+        </div>
+
+        <div class="header-status">
+          <span id="last-update" class="panel__meta">Esperando datos…</span>
+          <span id="demo-badge" class="badge badge--demo" hidden>Demo Mode</span>
+          <span
+            id="connection-badge"
+            class="badge badge--warning"
+            role="status"
+            aria-live="polite"
+            >Connecting</span
+          >
+        </div>
+      </header>
+
+      <main class="app-main">
+        <section class="services-overview" aria-labelledby="services-title">
+          <h2 id="services-title" class="visually-hidden">Estado de servicios</h2>
+
+          <article class="panel status-card" data-service="internet" data-state="offline">
+            <div class="status-card__head">
+              <h3 class="status-card__name">Internet</h3>
+              <span class="badge badge--warning" data-role="status">…</span>
+            </div>
+            <p class="status-card__detail" data-role="detail">Conectando…</p>
+          </article>
+
+          <article class="panel status-card" data-service="pfsense" data-state="offline">
+            <div class="status-card__head">
+              <h3 class="status-card__name">pfSense</h3>
+              <span class="badge badge--warning" data-role="status">…</span>
+            </div>
+            <p class="status-card__detail" data-role="detail">Conectando…</p>
+          </article>
+
+          <article class="panel status-card" data-service="portal" data-state="offline">
+            <div class="status-card__head">
+              <h3 class="status-card__name">Portal Cautivo</h3>
+              <span class="badge badge--warning" data-role="status">…</span>
+            </div>
+            <p class="status-card__detail" data-role="detail">Conectando…</p>
+          </article>
+        </section>
+
+        <section class="metric-grid" aria-labelledby="metrics-title">
+          <h2 id="metrics-title" class="visually-hidden">Métricas de red</h2>
+
+          <article class="panel metric-card">
+            <h3 class="metric-card__label">Latencia</h3>
+            <p id="metric-latency" class="metric-card__value">--</p>
+          </article>
+
+          <article class="panel metric-card">
+            <h3 class="metric-card__label">Download</h3>
+            <p id="metric-download" class="metric-card__value">--</p>
+          </article>
+
+          <article class="panel metric-card">
+            <h3 class="metric-card__label">Upload</h3>
+            <p id="metric-upload" class="metric-card__value">--</p>
+          </article>
+
+          <article class="panel metric-card">
+            <h3 class="metric-card__label">Usuarios activos</h3>
+            <p id="metric-users" class="metric-card__value">--</p>
+          </article>
+
+          <article class="panel metric-card">
+            <h3 class="metric-card__label">Uptime</h3>
+            <p id="metric-uptime" class="metric-card__value">--</p>
+          </article>
+        </section>
+
+        <p id="connection-notice" class="notice" role="alert" hidden>
+          <span class="notice__label">Sin conexión</span>
+          <span id="connection-notice-message"></span>
+        </p>
+
+        <section class="panels" aria-label="Análisis de tráfico y servicios">
+          <article class="panel chart-panel" aria-labelledby="chart-title">
+            <div class="panel__header">
+              <h2 id="chart-title" class="panel__title">Tráfico en tiempo real</h2>
+              <div class="chart-legend">
+                <span class="chart-legend__item">
+                  <span
+                    class="chart-legend__swatch"
+                    style="--swatch: var(--color-cyan)"
+                    aria-hidden="true"
+                  ></span>
+                  Download
+                </span>
+                <span class="chart-legend__item">
+                  <span
+                    class="chart-legend__swatch"
+                    style="--swatch: var(--color-yellow)"
+                    aria-hidden="true"
+                  ></span>
+                  Upload
+                </span>
+              </div>
+            </div>
+
+            <div class="chart-wrap">
+              <canvas
+                id="traffic-chart"
+                class="chart-canvas"
+                role="img"
+                aria-label="Gráfica de los últimos 60 registros de download y upload en Mbps"
+              ></canvas>
+            </div>
+          </article>
+
+          <article class="panel" aria-labelledby="services-table-title">
+            <div class="panel__header">
+              <h2 id="services-table-title" class="panel__title">
+                Estado de servicios
+              </h2>
+            </div>
+
+            <div class="table-scroll">
+              <table class="services-table">
+                <caption class="visually-hidden">
+                  Estado y latencia de los servicios de red
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Servicio</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Latencia</th>
+                  </tr>
+                </thead>
+                <tbody id="services-table-body">
+                  <tr data-service="internet">
+                    <th scope="row">Internet</th>
+                    <td><span class="badge badge--warning" data-role="status">…</span></td>
+                    <td class="table-latency" data-role="latency">--</td>
+                  </tr>
+                  <tr data-service="pfsense">
+                    <th scope="row">pfSense</th>
+                    <td><span class="badge badge--warning" data-role="status">…</span></td>
+                    <td class="table-latency" data-role="latency">--</td>
+                  </tr>
+                  <tr data-service="portal">
+                    <th scope="row">Portal Cautivo</th>
+                    <td><span class="badge badge--warning" data-role="status">…</span></td>
+                    <td class="table-latency" data-role="latency">--</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <span>CyberNet · Internet Prepago</span>
+        <span>Network Control Center</span>
+      </footer>
+    </div>
+  </body>
+</html>
